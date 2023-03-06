@@ -23,10 +23,10 @@ def calcSymH(u, d, l, a):
 
 
 def calcValH(u, d, l, a):
-    H = [[np.cos(u),   -np.sin(u) * np.cos(a),     np.sin(u) * np.sin(a),      l * np.cos(u)],
-         [np.sin(u),   np.cos(u) * np.cos(a),      -np.cos(u) * np.sin(a),     l * np.sin(u)],
-         [0,            np.sin(a),                   np.cos(a),                   d],
-         [0,            0,                            0,                            1]]
+    H = [[np.cos(u),    -np.sin(u) * np.cos(a),     np.sin(u) * np.sin(a),      l * np.cos(u)],
+         [np.sin(u),    np.cos(u) * np.cos(a),      -np.cos(u) * np.sin(a),     l * np.sin(u)],
+         [0,            np.sin(a),                  np.cos(a),                  d],
+         [0,            0,                          0,                          1]]
 
     return np.array(H)
 

@@ -1,7 +1,6 @@
 import numpy as np
 import sympy as sym
 
-
 # D-H parameters
 # +------+---------+--------------------+
 # |  d   |    l    |       alpha        |
@@ -12,55 +11,40 @@ import sympy as sym
 # | -L3  |    L4   |    - pi / 2        |
 # +------+---------+--------------------+
 
+DHPARAMS = np.array([[0, 0, np.pi / 2],
+                     [0, 1450, 0],
+                     [0, 1200, 0],
+                     [-150, 200, -np.pi / 2]])
+
 
 def calcSymH(u, d, l, a):
-    H = [[sym.cos(u),   -sym.sin(u) * np.cos(a),    sym.sin(u) * np.sin(a),     l * sym.cos(u)],
-         [sym.sin(u),   sym.cos(u) * np.cos(a),     -sym.cos(u) * np.sin(a),    l * sym.sin(u)],
-         [0,            np.sin(a),                  np.cos(a),                  d],
-         [0,            0,                          0,                          1]]
+    H = [[sym.cos(u), -sym.sin(u) * np.cos(a), sym.sin(u) * np.sin(a), l * sym.cos(u)],
+         [sym.sin(u), sym.cos(u) * np.cos(a), -sym.cos(u) * np.sin(a), l * sym.sin(u)],
+         [0, np.sin(a), np.cos(a), d],
+         [0, 0, 0, 1]]
 
     return np.array(H)
 
 
 def calcValH(u, d, l, a):
-    H = [[np.cos(u),    -np.sin(u) * np.cos(a),     np.sin(u) * np.sin(a),      l * np.cos(u)],
-         [np.sin(u),    np.cos(u) * np.cos(a),      -np.cos(u) * np.sin(a),     l * np.sin(u)],
-         [0,            np.sin(a),                  np.cos(a),                  d],
-         [0,            0,                          0,                          1]]
+    H = [[np.cos(u), -np.sin(u) * np.cos(a), np.sin(u) * np.sin(a), l * np.cos(u)],
+         [np.sin(u), np.cos(u) * np.cos(a), -np.cos(u) * np.sin(a), l * np.sin(u)],
+         [0, np.sin(a), np.cos(a), d],
+         [0, 0, 0, 1]]
 
     return np.array(H)
 
 
 if __name__ == '__main__':
-    # Robot Lengths
-    L1 = 1450
-    L2 = 1200
-    L3 = 150
-    L4 = 200
-
     # Upsilon
     u1 = sym.Symbol('u1')
     u2 = sym.Symbol('u2')
     u3 = sym.Symbol('u3')
     u4 = sym.Symbol('u4')
 
-    # Delta
-    d1 = 0
-    d2 = 0
-    d3 = 0
-    d4 = -L3
-
-    # Lambda
-    l1 = 0
-    l2 = L1
-    l3 = L2
-    l4 = L4
-
-    # Alpha
-    a1 = np.pi / 2
-    a2 = 0
-    a3 = 0
-    a4 = -np.pi / 2
+    d1, d2, d3, d4 = DHPARAMS[:, 0]  # Delta
+    l1, l2, l3, l4 = DHPARAMS[:, 1]  # Lambda
+    a1, a2, a3, a4 = DHPARAMS[:, 2]  # Alpha
 
     # -> D-H Transformation Matrix - Symbolic Calculations
     H1 = calcSymH(u1, d1, l1, a1)
@@ -72,7 +56,7 @@ if __name__ == '__main__':
     print(f"Symbolic H: \n{H_sym}")
 
     # -> D-H Transformation Matrix - Checking Values
-    H1 = calcValH(np.pi/2, d1, l1, a1)
+    H1 = calcValH(np.pi / 2, d1, l1, a1)
     H2 = calcValH(np.pi, d2, l2, a2)
     H3 = calcValH(0, d3, l3, a3)
     H4 = calcValH(np.pi, d4, l4, a4)

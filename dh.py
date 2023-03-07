@@ -1,5 +1,6 @@
 import numpy as np
 import sympy as sym
+from prettytable import PrettyTable
 
 # D-H parameters
 # +------+---------+--------------------+
@@ -53,7 +54,12 @@ if __name__ == '__main__':
     H4 = calcSymH(u4, d4, l4, a4)
 
     H_sym = sym.simplify(H1.dot(H2).dot(H3).dot(H4))
-    print(f"Symbolic H: \n{H_sym}")
+    H_tab = PrettyTable()
+    H_tab.add_column("1st", H_sym[:, 0])
+    H_tab.add_column("2nd", H_sym[:, 1])
+    H_tab.add_column("3rd", H_sym[:, 2])
+    H_tab.add_column("4th", H_sym[:, 3])
+    print("Symbolic H: \n", H_tab)
 
     # -> D-H Transformation Matrix - Checking Values
     H1 = calcValH(np.pi / 2, d1, l1, a1)

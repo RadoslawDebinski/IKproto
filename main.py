@@ -67,9 +67,9 @@ if __name__ == '__main__':
     # h0to5 = np.matmul(iCsc(0, 0, 450, 0, 0, np.pi), fCsc(-1925, -140, 1395.737, 0, np.pi, 0))
 
     h0toB = iCsc(0, 0, 450, 0, 0, np.pi)
-    hBto5 = fCsc(-1925, -140, 1395.737, 0, np.pi, 0)
+    hBto5 = fCsc(-1925, -140, 1395.737, np.pi, 0, 0)
 
-    h0to5 = hBto5 # h0toB.dot(hBto5)
+
 
     # # # TESTS STEP 1
     # # # SIMPLE TEST FOR "Forward coordinate system conversion - fCsc" - PASS!
@@ -81,25 +81,22 @@ if __name__ == '__main__':
     # # print(np.matmul(iCsc(0, 0, 10, 0, np.pi, np.pi), [[1], [1], [1], [1]]))
     # print(np.matmul(iCsc(2, 0, 0, 0, np.pi/2, np.pi/2), [[1], [2], [3], [1]]))
 
-    # INPUT DATA
+    # EXAMPLE OF INPUT DATA
     # h0toB(0, 0, 450, 0, 0, np.pi)
     # hBto5(-1925, -140, 1395.737, 0, np.pi, 0)
-    # OUTPUT DATA
+    # EXAMPLE OF OUTPUT DATA
     # -1925, 10, 1705.737
-
     # pw DATA
-    werX = np.array([[h0to5[0][0]], [h0to5[1][0]], [h0to5[2][0]]])
-    werZ = np.array([[h0to5[0][2]], [h0to5[1][2]], [h0to5[2][2]]])
-    tran = np.array([[h0to5[0][3]], [h0to5[1][3]], [h0to5[2][3]]])
-    # # OUTPUT pw DATA
-    # # print(tran)
-    # # print(werX)
-    # # print(werZ)
-    # # print(DHPARAMS)
-    #
+    werY = np.array([[hBto5[0][1]], [hBto5[1][1]], [hBto5[2][1]]])
+    werZ = np.array([[hBto5[0][2]], [hBto5[1][2]], [hBto5[2][2]]])
+    tran = np.array([[hBto5[0][3]], [hBto5[1][3]], [hBto5[2][3]]])
+
     # # pw COMPUTE and DH PARAMS
-    L3 = -DHPARAMS[3][0]
+    L3 = DHPARAMS[3][0]
     L4 = DHPARAMS[3][1]
-    print(f"{L3} {L4}")
-    pw = tran - (L4*werX) - ((-L3)*werZ)
+
+    tranWriY = L3*werY
+    tranWriZ = L4*werZ
+
+    pw = tran + tranWriY + tranWriZ
     print(pw)

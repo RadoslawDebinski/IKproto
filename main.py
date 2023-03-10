@@ -67,9 +67,9 @@ if __name__ == '__main__':
     # h0to5 = np.matmul(iCsc(0, 0, 450, 0, 0, np.pi), fCsc(-1925, -140, 1395.737, 0, np.pi, 0))
 
     h0toB = iCsc(0, 0, 450, 0, 0, np.pi)
-    hBto5 = fCsc(-1925, -140, 1395.737, np.pi, 0, 0)
-
-
+    hBto5 = fCsc(-804.847, 303.021, 2438.528, np.pi, 0, 0)
+    z5axisCorr = np.append(np.append(rotZ(np.pi/60), [[0], [0], [0]], axis=1), [[0, 0, 0, 1]], axis=0)  # rotZ(np.pi/60)
+    hBto5 = hBto5.dot(z5axisCorr)
 
     # # # TESTS STEP 1
     # # # SIMPLE TEST FOR "Forward coordinate system conversion - fCsc" - PASS!
@@ -81,11 +81,24 @@ if __name__ == '__main__':
     # # print(np.matmul(iCsc(0, 0, 10, 0, np.pi, np.pi), [[1], [1], [1], [1]]))
     # print(np.matmul(iCsc(2, 0, 0, 0, np.pi/2, np.pi/2), [[1], [2], [3], [1]]))
 
-    # EXAMPLE OF INPUT DATA
+    # EXAMPLE OF INPUT DATA 1
     # h0toB(0, 0, 450, 0, 0, np.pi)
-    # hBto5(-1925, -140, 1395.737, 0, np.pi, 0)
-    # EXAMPLE OF OUTPUT DATA
+    # hBto5(-1925, -140, 1395.737, np.pi, 0, 0)
+    # EXAMPLE OF OUTPUT DATA 1
     # -1925, 10, 1705.737
+
+    # EXAMPLE OF INPUT DATA 2
+    # h0toB(0, 0, 0, 0, 0, 0)
+    # hBto5(-2194.111, -140, 2016.32, np.pi, -np.pi / 2, 0)
+    # EXAMPLE OF OUTPUT DATA 2
+    # -1884.111, 10, 2016.32
+
+    # EXAMPLE OF INPUT DATA 3
+    # h0toB(0, 0, 0, 0, 0, 0)
+    # hBto5(-804.847, 303.021, 2438.528, np.pi, 0, 0)
+    # EXAMPLE OF OUTPUT DATA 3
+    # -729.847, 432.924, 2748.528
+
     # pw DATA
     werY = np.array([[hBto5[0][1]], [hBto5[1][1]], [hBto5[2][1]]])
     werZ = np.array([[hBto5[0][2]], [hBto5[1][2]], [hBto5[2][2]]])
@@ -98,5 +111,5 @@ if __name__ == '__main__':
     tranWriY = L3*werY
     tranWriZ = L4*werZ
 
-    pw = tran + tranWriY + tranWriZ
+    pw = tran + tranWriY - tranWriZ
     print(pw)

@@ -12,26 +12,26 @@ from prettytable import PrettyTable
 # | -L3  |    L4   |    - pi / 2        |
 # +------+---------+--------------------+
 
-DHPARAMS = np.array([[0, 0, np.pi / 2],
-                     [0, 1450, 0],
-                     [0, 1200, 0],
-                     [-150, 200, -np.pi / 2]])
+DHPARAMS = np.array([[0,       0,   np.pi / 2],
+                     [0,    1450,           0],
+                     [0,    1200,           0],
+                     [-150,  310,  -np.pi / 2]])
 
 
 def calcSymH(u, d, l, a):
-    H = [[sym.cos(u), -sym.sin(u) * np.cos(a), sym.sin(u) * np.sin(a), l * sym.cos(u)],
-         [sym.sin(u), sym.cos(u) * np.cos(a), -sym.cos(u) * np.sin(a), l * sym.sin(u)],
-         [0, np.sin(a), np.cos(a), d],
-         [0, 0, 0, 1]]
+    H = [[sym.cos(u),   -sym.sin(u) * np.cos(a),     sym.sin(u) * np.sin(a),    l * sym.cos(u)],
+         [sym.sin(u),    sym.cos(u) * np.cos(a),    -sym.cos(u) * np.sin(a),    l * sym.sin(u)],
+         [0,                          np.sin(a),                  np.cos(a),                 d],
+         [0,                                  0,                          0,                 1]]
 
     return np.array(H)
 
 
 def calcValH(u, d, l, a):
-    H = [[np.cos(u), -np.sin(u) * np.cos(a), np.sin(u) * np.sin(a), l * np.cos(u)],
-         [np.sin(u), np.cos(u) * np.cos(a), -np.cos(u) * np.sin(a), l * np.sin(u)],
-         [0, np.sin(a), np.cos(a), d],
-         [0, 0, 0, 1]]
+    H = [[np.cos(u),    -np.sin(u) * np.cos(a),      np.sin(u) * np.sin(a),     l * np.cos(u)],
+         [np.sin(u),     np.cos(u) * np.cos(a),     -np.cos(u) * np.sin(a),     l * np.sin(u)],
+         [0,                         np.sin(a),                  np.cos(a),                 d],
+         [0,                                 0,                          0,                 1]]
 
     return np.array(H)
 
@@ -66,8 +66,8 @@ if __name__ == '__main__':
     H2 = calcValH(np.pi, d2, l2, a2)
     H3 = calcValH(0, d3, l3, a3)
     H4 = calcValH(np.pi, d4, l4, a4)
-
     H_val = H1.dot(H2).dot(H3).dot(H4)
-    detH = np.linalg.det(H_val)
+
+    # detH = np.linalg.det(H_val)
     # print(f"H with values: \n{H_val}")
     # print(f"det(H) = {detH}")

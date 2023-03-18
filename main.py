@@ -63,66 +63,35 @@ def iCsc(x, y, z, alpha, beta, gamma):
     return end
 
 
+def calcValH(u, d, l, a):
+    H = [[np.cos(u),    -np.sin(u) * np.cos(a),      np.sin(u) * np.sin(a),     l * np.cos(u)],
+         [np.sin(u),     np.cos(u) * np.cos(a),     -np.cos(u) * np.sin(a),     l * np.sin(u)],
+         [0,                         np.sin(a),                  np.cos(a),                 d],
+         [0,                                 0,                          0,                 1]]
+
+    return np.array(H)
+
+
+
 if __name__ == '__main__':
-    # h0to5 = np.matmul(iCsc(0, 0, 450, 0, 0, np.pi), fCsc(-1925, -140, 1395.737, 0, np.pi, 0))
 
-    h0toB = iCsc(0, 0, 450, 0, 0, np.pi)
-    hBto5 = fCsc(-804.847, 303.021, 2438.528, np.pi, 0, np.pi/6)
-    q5 = np.array([np.pi/6])
-    h0to5 = h0toB.dot(hBto5)
+    # INPUT DATA
+    xb, yb, zb, rXb, rYb, rZb = 0, 0, 450, 0, 0, np.pi
+    x4, y4, z4, rX4, rY4, rZ4 = -804.847, 303.021, 2438.528, np.pi, 0, np.pi/6
 
-    # # # TESTS STEP 1
-    # # # SIMPLE TEST FOR "Forward coordinate system conversion - fCsc" - PASS!
-    # print(np.matmul(fCsc(0, 0, 10, 0, np.pi, np.pi), [[1], [1], [1], [1]]))
-    # print(np.matmul(fCsc(2, 0, 0, 0, np.pi/2, np.pi/2), [[1], [2], [3], [1]]))
-    #
-    # # # TESTS STEP 2
-    # # # SIMPLE TEST FOR "Inverse coordinate system conversion - iCsc"
-    # print(np.matmul(iCsc(0, 0, 10, 0, np.pi, np.pi), [[1], [1], [1], [1]]))
-    # print(np.matmul(iCsc(2, 0, 0, 0, np.pi/2, np.pi/2), [[1], [2], [3], [1]]))
+    h0toB = iCsc(xb, yb, zb, rXb, rYb, rZb)
+    hBto4 = fCsc(x4, y4, z4, rX4, rY4, rZ4)
 
-    # EXAMPLE OF INPUT DATA 1
-    # h0toB(0, 0, 450, 0, 0, np.pi)
-    # hBto5(-1925, -140, 1395.737, np.pi, 0, 0)
-    # EXAMPLE OF OUTPUT DATA 1
-    # pw = -1925, 10, 1705.737 - PASS!
+    q5 = rZ4
 
-    # EXAMPLE OF INPUT DATA 2
-    # h0toB(0, 0, 0, 0, 0, 0)
-    # hBto5(-2194.111, -140, 2016.32, np.pi, -np.pi / 2, 0)
-    # EXAMPLE OF OUTPUT DATA 2
-    # pw = -1884.111, 10, 2016.32 - PASS!
-
-    # EXAMPLE OF INPUT DATA 3
-    # h0toB(0, 0, 0, 0, 0, 0)
-    # hBto5(-804.847, 303.021, 2438.528, np.pi, 0, np.pi/6)
-    # EXAMPLE OF OUTPUT DATA 3
-    # pw = -729.847, 432.924, 2748.528 - PASS!
-
-    # EXAMPLE OF INPUT DATA 4
-    # h0toB(0, 0, 0, 0, 0, 0)
-    # hBto5(-140, 1764.23, 795.737, np.pi, 0, np.pi/2)
-    # EXAMPLE OF OUTPUT DATA 4
-    # pw = 10, 1764.23, 1105.737 - PASS!
-
-    # EXAMPLE OF INPUT DATA 5
-    # h0toB(0, 0, 0, 0, 0, 0)
-    # hBto5(-1057.125, -1255.115, 666.506, -np.pi/2, -np.pi / 2 -np.pi / 4, np.pi/2)
-    # EXAMPLE OF OUTPUT DATA 5
-    # pw = -943.988, -929.845, 666.506 - PASS!
-
-    # EXAMPLE OF INPUT DATA 6
-    # h0toB(0, 0, 0, 0, 0, 0)
-    # hBto5(-1985.483, -676.947, 2543.036, -np.pi - 1 * np.pi / 12, -np.pi / 2 - np.pi / 4, np.pi/2 + 7 * np.pi / 12)
-    # EXAMPLE OF OUTPUT DATA 6
-    # pw = -1812.572, -475.324, 2323.833
+    h0to4 = h0toB.dot(hBto4)
 
     # pw DATA
-    werY = np.array([[h0to5[0][1]], [h0to5[1][1]], [h0to5[2][1]]])
-    werZ = np.array([[h0to5[0][2]], [h0to5[1][2]], [h0to5[2][2]]])
-    tran = np.array([[h0to5[0][3]], [h0to5[1][3]], [h0to5[2][3]]])
+    werY = np.array([[h0to4[0][1]], [h0to4[1][1]], [h0to4[2][1]]])
+    werZ = np.array([[h0to4[0][2]], [h0to4[1][2]], [h0to4[2][2]]])
+    tran = np.array([[h0to4[0][3]], [h0to4[1][3]], [h0to4[2][3]]])
 
-    # # pw COMPUTE and DH PARAMS
+    # pw COMPUTE and DH PARAMS
     L1 = DHPARAMS[1][1]
     L2 = DHPARAMS[2][1]
     L3 = DHPARAMS[3][0]
@@ -133,6 +102,7 @@ if __name__ == '__main__':
 
     pw = tran + tranWriY - tranWriZ
 
+    # compute first 3 angles analytically
     xp, yp, zp = pw[0], pw[1], pw[2]
     r = np.sqrt(np.square(xp) + np.square(yp))
     s = np.sqrt(np.square(r) + np.square(zp))
@@ -141,15 +111,33 @@ if __name__ == '__main__':
     beta = np.arccos((np.square(s) + np.square(L1) - np.square(L2))/(2 * s * L1))
     gamma = np.arccos((np.square(L1) + np.square(L2) - np.square(s))/(2 * L1 * L2))
 
-    q1 = np.arctan2(yp, xp)
-    q2 = np.pi / 2 - alpha - beta
-    q3 = np.pi - gamma
+    q1 = (np.arctan2(yp, xp))[0]
+    q2 = (alpha + beta)[0]
+    q3 = (gamma - np.pi)[0]
 
-    print(f"angle q1 = {np.round(q1[0] * 180 / np.pi, 5)}°")
-    print(f"angle q2 = {np.round(q2[0] * 180 / np.pi, 5)}°")
-    print(f"angle q3 = {np.round(q3[0] * 180 / np.pi, 5)}°")
-    # print(f"angle q4 = {np.round(180 / np.pi, 5)}°")
-    print(f"angle q5 = {np.round(q5[0] * 180 / np.pi, 5)}°")
+    # compute 4th angle by dh matrices
 
+    d1, d2, d3, d4 = DHPARAMS[:, 0]  # Delta
+    l1, l2, l3, l4 = DHPARAMS[:, 1]  # Lambda
+    a1, a2, a3, a4 = DHPARAMS[:, 2]  # Alpha
 
+    h0to1 = calcValH(q1, d1, l1, a1)
+    h1to2 = calcValH(q2, d2, l2, a2)
+    h2to3 = calcValH(q3, d3, l3, a3)
 
+    h0to3 = h0to1.dot(h1to2).dot(h2to3)
+
+    h3to4 = np.linalg.inv(h0to3).dot(h0to4)
+
+    sinq4 = h3to4[1][3]
+    cosq4 = h3to4[0][3]
+
+    tgq4 = sinq4 / cosq4
+
+    q4 = np.arctan2(sinq4, cosq4)
+
+    print(f"angle q1 = {np.round(q1 * 180 / np.pi, 5)}°")
+    print(f"angle q2 = {np.round(q2 * 180 / np.pi, 5)}°")
+    print(f"angle q3 = {np.round(q3 * 180 / np.pi, 5)}°")
+    print(f"angle q4 = {np.round(q4 * 180 / np.pi, 5)}°")
+    print(f"angle q5 = {np.round(q5 * 180 / np.pi, 5)}°")

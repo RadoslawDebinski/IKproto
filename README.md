@@ -6,7 +6,7 @@ We provided two algorithms in this repository dedicated to the robotic arm given
 
 First "dh" which one computes forward kinematics transfomartion by Denavid-Harthenberg parameters symbollically and numerically.
 
-First, "dh" computes forward kinematics transformation by Denavid-Harthenberg parameters symbolically and numerically. 
+Second, "main" indicates an inverse kinematics algorithm to compute rotation angles of all axes in an original way by rotation and translation matrices and analytical calculations.
 Inputs of second algorithm are:
 
   xb, yb, zb, rXb, rYb, rZb = position and rotation of the robot's 0 coordinate system in reference to the basic simulation system
